@@ -37,11 +37,11 @@ const fetchIDController = (req, res) => {
 };
 
 const fetchPnameController = (req, res) => {
-    ProductModel.find({title: req.params.title}).then((data) => {
+    ProductModel.find({title: req.params.pname}).then((data) => {
         if (data.length !== 0) {
             res.send(data[0]);
         } else {
-            res.json({message: `Product with ${title} is not available!`})
+            res.json({message: `Product with ${pname} is not available!`})
         }
     });
 };
