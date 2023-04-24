@@ -1,10 +1,16 @@
 const express = require("express");
 const ProductRouter = express.Router();
 
-const { addProductController } = require("../controllers/ProductController");
+const {
+  addProductController,
+  fetchIDController,
+  fetchPnameController,
+  fetchPdetailsController
+} = require("../controllers/ProductController");
 
 ProductRouter.post("/addproduct", addProductController);
-// ProductRouter.app("/categories", controller_function);
-// ProductRouter.app("/cateogory/mobiles",controller_function);
+ProductRouter.get("/id", fetchIDController);
+ProductRouter.get("/pname", fetchPnameController);
+ProductRouter.get("/productdetails", fetchPdetailsController);
 
 module.exports = ProductRouter;

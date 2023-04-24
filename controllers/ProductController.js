@@ -1,36 +1,60 @@
 const ProductModel = require("../models/db.schema");
 
-const addProductController = async(req, res) => {
-    const { id, title, description, price, discount, rating, brand, category, image } = req.body;
-    let productobj = {
-        id: id,
-        title: title,
-        description: description,
-        price: price,
-        discount: discount,
-        rating: rating,
-        brand: brand,
-        category: category,
-        image: image
-    }
+const addProductController = async (req, res) => {
+  const { id, title, price, discount, category } = req.body;
+  let productobj = {
+    id: id,
+    title: title,
+    price: price,
+    discount: discount,
+    category: category,
+  };
 
-    let data = await ProductModel(productobj).save();
-    try {
-        if(data) {
-            return res.json({
-                message: "Product added successfully"
-            })
+  ProductModel.find({ id }).then((data) => {
+    if (data.length == 0) {
+      ProductModel(productobj)
+        .save()
+        .then((data) =>
+          res.send({ message: "Product added successfuly", data })
+        )
+        .catch((error) =>
+          res.send({ message: "Error while adding product", error })
+        );
+    } else {
+      res.json({ message: `Product with ID-${id} exists!` });
+    }
+  });
+};
+
+const fetchIDController = (req, res) => {
+  ProductModel.find({ id: req.params.id }).then((data) => {
+    if (data.length !== 0) {
+      res.send(data[0]);
+    } else {
+      res.json({ message: `Product with ID-${id} is not available!` });
+    }
+  });
+};
+
+const fetchPnameController = (req, res) => {
+    ProductModel.find({title: req.params.title}).then((data) => {
+        if (data.length !== 0) {
+            res.send(data[0]);
+        } else {
+            res.json({message: `Product with ${title} is not available!`})
         }
-        return res.json({
-            message: "Product not added"
-        })
-    } catch(error) {
-        return res.json({
-            message: error
-        })
-    }    
+    });
+};
+
+const fetchPdetailsController = (req, res) => {
+    ProductModel.find().then((data) => {
+        res.send(data);
+    });
 }
 
 module.exports = {
-    addProductController
-}
+  addProductController,
+  fetchIDController,
+  fetchPnameController,
+  fetchPdetailsController
+};
